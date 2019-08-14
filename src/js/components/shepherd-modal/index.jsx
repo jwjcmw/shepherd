@@ -40,6 +40,7 @@ export default class ShepherdModal extends Component {
             x='0'
             y='0'
           />
+
           <rect
             className={`${classPrefix}shepherd-modal-mask-opening`}
             fill='#000000'
@@ -48,6 +49,15 @@ export default class ShepherdModal extends Component {
             y={state.openingProperties.y}
             width={state.openingProperties.width}
           />
+          {state.openingProperties.image > 0 &&
+            <image
+              height={state.openingProperties.height}
+              x={state.openingProperties.x}
+              y={state.openingProperties.y}
+              width={state.openingProperties.width}
+            ><use xlinkHref={state.openingProperties.image} />
+            </image>
+          }
         </mask>
       </defs>
       <rect
@@ -86,7 +96,7 @@ export default class ShepherdModal extends Component {
    * @param {HTMLElement} targetElement The element the opening will expose
    * @param {Number} modalOverlayOpeningPadding An amount of padding to add around the modal overlay opening
    */
-  positionModalOpening(targetElement, modalOverlayOpeningPadding = 0) {
+  positionModalOpening(targetElement, modalOverlayOpeningPadding = 0, modalOverlayOpeningImage = "") {
     if (targetElement.getBoundingClientRect) {
       const { x, y, width, height, left, top } = targetElement.getBoundingClientRect();
 
@@ -96,7 +106,8 @@ export default class ShepherdModal extends Component {
           x: (x || left) - modalOverlayOpeningPadding,
           y: (y || top) - modalOverlayOpeningPadding,
           width: (width + (modalOverlayOpeningPadding * 2)),
-          height: (height + (modalOverlayOpeningPadding * 2))
+          height: (height + (modalOverlayOpeningPadding * 2)),
+          image: modalOverlayOpeningImage,
         }
       });
     }
@@ -159,12 +170,13 @@ export default class ShepherdModal extends Component {
    */
   _styleForStep(step) {
     const { modalOverlayOpeningPadding } = step.options;
+    const { modalOverlayOpeningImage } = step.options;
 
     if (step.target) {
       // Setup recursive function to call requestAnimationFrame to update the modal opening position
       const rafLoop = () => {
         this.rafId = undefined;
-        this.positionModalOpening(step.target, modalOverlayOpeningPadding);
+        this.positionModalOpening(step.target, modalOverlayOpeningPadding, modalOverlayOpeningImage);
         this.rafId = requestAnimationFrame(rafLoop);
       };
 

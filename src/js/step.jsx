@@ -22,9 +22,9 @@ const { render } = preact;
  * @return {Function} A function that returns the unique id for the step
  * @private
  */
-const uniqueId = (function() {
+const uniqueId = (function () {
   let id = 0;
-  return function() {
+  return function () {
     return ++id;
   };
 })();
@@ -109,6 +109,7 @@ export class Step extends Evented {
    * }
    * ```
    * @param {Number} options.modalOverlayOpeningPadding An amount of padding to add around the modal overlay opening
+   * @param {string} options.modalOverlayOpeningImage An image to use in the the modal overlay opening
    * @return {Step} The newly created Step instance
    */
   constructor(tour, options = {}) {
